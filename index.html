@@ -224,6 +224,11 @@
             transform: scale(1.05);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .form-note {
             font-size: 0.9rem;
             color: #666;
@@ -256,6 +261,37 @@
             padding: 2px 6px;
             border-radius: 3px;
             font-family: monospace;
+            color: #d63384;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 2px solid #c3e6cb;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .error-message {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 2px solid #f5c6cb;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
         }
 
         .confetti {
@@ -352,40 +388,45 @@
             <div class="emoji">💌</div>
             <div class="message" style="font-size: 2rem; margin-bottom: 20px;">Let's stay in touch!</div>
             
-            <!-- SETUP REQUIRED: See instructions below -->
+            <!-- ⚠️ IMPORTANT: Replace YOUR_FORM_ID with your actual Formspree ID -->
             <div class="setup-instructions">
-                <h3>⚠️ Email Setup Required</h3>
-                <p><strong>Choose ONE of these methods:</strong></p>
-                
-                <p><strong>METHOD 1: Formspree (Recommended)</strong></p>
+                <h3>⚠️ Setup Instructions</h3>
+                <p><strong>Follow these steps:</strong></p>
                 <ol>
-                    <li>Go to <a href="https://formspree.io" target="_blank">formspree.io</a></li>
-                    <li>Sign up (free)</li>
-                    <li>Create a new form</li>
-                    <li>Copy your form endpoint (looks like: <code>https://formspree.io/f/xxxxxx</code>)</li>
-                    <li>Replace line 400 below with your endpoint</li>
+                    <li>Go to <a href="https://formspree.io" target="_blank">formspree.io</a> and sign up</li>
+                    <li>Create a new form and get your form ID</li>
+                    <li>Replace <code>YOUR_FORM_ID</code> in line 352 with your actual ID</li>
+                    <li><strong>IMPORTANT:</strong> Upload this file to a web host (GitHub Pages, Netlify, etc.)</li>
+                    <li>Formspree will NOT work if you open the file directly from your computer!</li>
                 </ol>
-                
-                <p><strong>METHOD 2: Google Forms (Easiest)</strong></p>
-                <ol>
-                    <li>Create a Google Form at forms.google.com</li>
-                    <li>Add fields: Name, Instagram, Contact, Message</li>
-                    <li>Get the form link</li>
-                    <li>Replace the form below with a button linking to your Google Form</li>
-                </ol>
+                <p style="margin-top: 10px;"><strong>Your form endpoint should look like:</strong><br>
+                <code>https://formspree.io/f/mxxxxxxx</code></p>
             </div>
             
-            <!-- Replace action URL with your Formspree endpoint -->
-            <form id="valentineForm" action="https://formspree.io/f/xreldlvq" method="POST">
+            <!-- Replace YOUR_FORM_ID below -->
+            <form id="valentineForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
                 <input type="text" name="name" placeholder="Your Name *" required>
                 <input type="text" name="instagram" placeholder="Instagram ID (e.g., @username) *" required>
-                <input type="text" name="contact" placeholder="Phone Number or Email *" required>
+                <input type="email" name="_replyto" placeholder="Your Email *" required>
+                <input type="text" name="contact" placeholder="Phone Number (optional)">
                 <textarea name="message" placeholder="Leave a sweet message (optional)" rows="3"></textarea>
                 
+                <!-- Hidden fields for better email formatting -->
                 <input type="hidden" name="_subject" value="💕 New Valentine Response!">
+                <input type="hidden" name="_next" value="#success">
                 
-                <button type="submit" class="submit-btn">Send 💕</button>
+                <button type="submit" class="submit-btn" id="submitBtn">Send 💕</button>
             </form>
+            
+            <div class="success-message" id="successMessage">
+                <h3>✅ Message Sent Successfully!</h3>
+                <p>Thanks for sharing your info! KB will get back to you soon! 💕</p>
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                <h3>❌ Oops! Something went wrong</h3>
+                <p>Please make sure you've set up Formspree correctly and are hosting this page online.</p>
+            </div>
             
             <p class="form-note">Your info will be sent directly to KB 🔒</p>
         </div>
@@ -401,9 +442,58 @@
         const questionSection = document.getElementById('questionSection');
         const celebration = document.getElementById('celebration');
         const contactForm = document.getElementById('contactForm');
+        const valentineForm = document.getElementById('valentineForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
 
         let floatingInterval;
         let isPaused = false;
+
+        // Check if form was submitted successfully (Formspree redirects with hash)
+        window.addEventListener('load', () => {
+            if (window.location.hash === '#success') {
+                questionSection.style.display = 'none';
+                celebration.style.display = 'none';
+                contactForm.style.display = 'flex';
+                successMessage.classList.add('show');
+                valentineForm.style.display = 'none';
+            }
+            setTimeout(startFloating, 500);
+        });
+
+        // Handle form submission
+        valentineForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending... 💌';
+            
+            const formData = new FormData(valentineForm);
+            
+            try {
+                const response = await fetch(valentineForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    successMessage.classList.add('show');
+                    valentineForm.style.display = 'none';
+                    createConfetti();
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                errorMessage.classList.add('show');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send 💕';
+                console.error('Error:', error);
+            }
+        });
 
         function getRandomPosition() {
             const btnRect = noBtn.getBoundingClientRect();
@@ -505,10 +595,6 @@
             document.body.appendChild(confetti);
             setTimeout(() => confetti.remove(), 3000);
         }
-
-        window.addEventListener('load', () => {
-            setTimeout(startFloating, 500);
-        });
     </script>
 </body>
 </html>
