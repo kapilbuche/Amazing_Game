@@ -337,7 +337,9 @@
         <div id="contactForm" class="contact-form">
             <div class="emoji">💌</div>
             <div class="message" style="font-size: 2rem; margin-bottom: 20px;">Let's stay in touch!</div>
-            <form id="valentineForm" action="https://formsubmit.co/kapilbucche007@gmail.com" method="POST">
+            
+            <!-- OPTION 1: FormSubmit (Replace YOUR_EMAIL@example.com with your real email) -->
+            <form id="valentineForm" action="https://formsubmit.co/YOUR_EMAIL@example.com" method="POST">
                 <input type="text" name="name" placeholder="Your Name *" required>
                 <input type="text" name="instagram" placeholder="Instagram ID (e.g., @username) *" required>
                 <input type="text" name="contact" placeholder="Phone Number or Email *" required>
@@ -347,9 +349,28 @@
                 <input type="hidden" name="_subject" value="💕 New Valentine Response!">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="box">
+                <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html">
                 
                 <button type="submit" class="submit-btn">Send 💕</button>
             </form>
+            
+            <!-- OPTION 2: If FormSubmit doesn't work, use Web3Forms
+            Steps to use Web3Forms:
+            1. Go to https://web3forms.com
+            2. Enter your email and get an Access Key
+            3. Replace the form above with this one (uncomment and add your access key):
+            
+            <form id="valentineForm" action="https://api.web3forms.com/submit" method="POST">
+                <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+                <input type="text" name="name" placeholder="Your Name *" required>
+                <input type="text" name="instagram" placeholder="Instagram ID (e.g., @username) *" required>
+                <input type="text" name="contact" placeholder="Phone Number or Email *" required>
+                <textarea name="message" placeholder="Leave a sweet message (optional)" rows="3"></textarea>
+                <input type="hidden" name="subject" value="💕 New Valentine Response!">
+                <button type="submit" class="submit-btn">Send 💕</button>
+            </form>
+            -->
+            
             <p class="form-note">Your info will be sent directly to KB 🔒</p>
         </div>
     </div>
