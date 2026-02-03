@@ -118,10 +118,6 @@
             transition: all 0.5s ease;
         }
 
-        #noBtn:hover {
-            transform: scale(1.05);
-        }
-
         .celebration {
             display: none;
             flex-direction: column;
@@ -168,6 +164,67 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Contact Form Styles */
+        .contact-form {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 10px 0;
+            border: 2px solid #f093fb;
+            border-radius: 25px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #f5576c;
+        }
+
+        .contact-form textarea {
+            border-radius: 15px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .form-note {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+            text-align: center;
+        }
+
         .confetti {
             position: fixed;
             width: 10px;
@@ -195,18 +252,6 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
-        }
-
-        .footer a {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            font-weight: 700;
-            transition: color 0.3s ease;
-        }
-
-        .footer a:hover {
-            color: #fff;
-            text-decoration: underline;
         }
 
         /* Mobile responsiveness */
@@ -245,6 +290,11 @@
             .thank-you {
                 font-size: 1.1rem;
             }
+
+            .contact-form input,
+            .contact-form textarea {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -258,6 +308,7 @@
     <div class="heart-bg" style="top: 60%; right: 10%; animation-delay: 5s;">💘</div>
 
     <div class="container">
+        <!-- Question Section -->
         <div id="questionSection">
             <h1>Hey There! 💕</h1>
             <p class="question">Will You Be My Valentine?</p>
@@ -267,10 +318,31 @@
             </div>
         </div>
 
+        <!-- Celebration Section -->
         <div id="celebration" class="celebration">
             <div class="emoji">😊</div>
             <div class="message">Yay! I knew it! 💕</div>
             <p class="thank-you">Thanks for accepting my Valentine request!</p>
+        </div>
+
+        <!-- Contact Form Section -->
+        <div id="contactForm" class="contact-form">
+            <div class="emoji">💌</div>
+            <div class="message" style="font-size: 2rem; margin-bottom: 20px;">Let's stay in touch!</div>
+            <form id="valentineForm" action="https://formsubmit.co/YOUR_EMAIL@example.com" method="POST">
+                <input type="text" name="name" placeholder="Your Name *" required>
+                <input type="text" name="instagram" placeholder="Instagram ID (e.g., @username) *" required>
+                <input type="text" name="contact" placeholder="Phone Number or Email *" required>
+                <textarea name="message" placeholder="Leave a sweet message (optional)" rows="3"></textarea>
+                
+                <!-- FormSubmit Configuration -->
+                <input type="hidden" name="_subject" value="💕 New Valentine Response!">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="box">
+                
+                <button type="submit" class="submit-btn">Send 💕</button>
+            </form>
+            <p class="form-note">Your info will be sent directly to KB 🔒</p>
         </div>
     </div>
 
@@ -284,6 +356,7 @@
         const noBtn = document.getElementById('noBtn');
         const questionSection = document.getElementById('questionSection');
         const celebration = document.getElementById('celebration');
+        const contactForm = document.getElementById('contactForm');
 
         let floatingInterval;
         let isPaused = false;
@@ -396,7 +469,7 @@
             moveAwayFrom(e.clientX, e.clientY);
         });
 
-        // Mobile: Touch handler
+        // Mobile: Touch handlers
         document.addEventListener('touchmove', (e) => {
             if (e.touches.length > 0) {
                 const touch = e.touches[0];
@@ -423,6 +496,12 @@
                     createConfetti();
                 }, i * 30);
             }
+
+            // Show contact form after celebration
+            setTimeout(() => {
+                celebration.style.display = 'none';
+                contactForm.style.display = 'flex';
+            }, 3000);
         });
 
         // Create confetti effect
