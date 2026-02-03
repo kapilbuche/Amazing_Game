@@ -181,28 +181,54 @@
             display: flex;
         }
 
-        .google-form-btn {
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 10px 0;
+            border: 2px solid #f093fb;
+            border-radius: 25px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #f5576c;
+        }
+
+        .contact-form textarea {
+            border-radius: 15px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .submit-btn {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
-            padding: 15px 40px;
+            padding: 12px 40px;
             border: none;
             border-radius: 50px;
             font-family: 'Quicksand', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            margin: 20px 0;
+            margin-top: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: transform 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+            width: 100%;
         }
 
-        .google-form-btn:hover {
+        .submit-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .form-note {
@@ -210,7 +236,6 @@
             color: #666;
             margin-top: 10px;
             text-align: center;
-            line-height: 1.6;
         }
 
         .confetti {
@@ -277,11 +302,6 @@
             .thank-you {
                 font-size: 1.1rem;
             }
-
-            .google-form-btn {
-                font-size: 1rem;
-                padding: 12px 30px;
-            }
         }
     </style>
 </head>
@@ -313,17 +333,18 @@
             <div class="emoji">💌</div>
             <div class="message" style="font-size: 2rem; margin-bottom: 20px;">Let's stay in touch!</div>
             
-            <p style="font-size: 1.1rem; color: #555; margin-bottom: 20px;">
-                Please fill out this quick form so I can get your info! 😊
+            <p style="font-size: 1.1rem; color: #555; margin: 20px 0; line-height: 1.6;">
+                Please share your details with me!<br>
+                It'll just take a moment 😊
             </p>
 
-            <a href="https://forms.gle/zoN4VCoDuwZq9DNk8" class="google-form-btn" target="_blank">
+            <a href="https://forms.gle/zoN4VCoDuwZq9DNk8" class="submit-btn" target="_blank" style="text-decoration: none; display: block;">
                 Fill Out Form 💕
             </a>
 
-            <p class="form-note">
-                🔒 Your info will be sent directly to KB<br>
-                Opens in a new tab • Takes just 30 seconds
+            <p class="form-note" style="margin-top: 15px;">
+                Opens in a new tab • Takes just 30 seconds<br>
+                Your info will be sent directly to KB 🔒
             </p>
         </div>
     </div>
@@ -420,12 +441,10 @@
             questionSection.style.display = 'none';
             celebration.style.display = 'flex';
             
-            // Create confetti
             for (let i = 0; i < 50; i++) {
                 setTimeout(() => createConfetti(), i * 30);
             }
 
-            // Show contact form after celebration
             setTimeout(() => {
                 celebration.style.display = 'none';
                 contactForm.style.display = 'flex';
