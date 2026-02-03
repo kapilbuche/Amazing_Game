@@ -20,6 +20,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            overflow-x: hidden;
         }
 
         .heart-bg {
@@ -180,11 +181,6 @@
             display: flex;
         }
 
-        .google-form-container {
-            width: 100%;
-            text-align: center;
-        }
-
         .google-form-btn {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
@@ -214,45 +210,7 @@
             color: #666;
             margin-top: 10px;
             text-align: center;
-        }
-
-        .setup-instructions {
-            background: #e7f3ff;
-            border: 2px solid #2196F3;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: left;
-            font-size: 0.9rem;
             line-height: 1.6;
-        }
-
-        .setup-instructions h3 {
-            color: #1976D2;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .setup-instructions ol {
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-
-        .setup-instructions li {
-            margin: 8px 0;
-        }
-
-        .setup-instructions code {
-            background: #fff;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-family: monospace;
-            color: #d63384;
-        }
-
-        .setup-instructions a {
-            color: #2196F3;
-            font-weight: 600;
         }
 
         .confetti {
@@ -262,6 +220,7 @@
             background: #f0f;
             position: absolute;
             animation: confetti-fall 3s linear;
+            pointer-events: none;
         }
 
         @keyframes confetti-fall {
@@ -281,34 +240,6 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
-        }
-
-        .url-input-box {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-
-        .url-input-box input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ffc107;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .url-input-box button {
-            background: #ffc107;
-            color: #000;
-            padding: 8px 20px;
-            border: none;
-            border-radius: 5px;
-            margin-top: 10px;
-            cursor: pointer;
-            font-weight: 600;
         }
 
         @media (max-width: 600px) {
@@ -346,6 +277,11 @@
             .thank-you {
                 font-size: 1.1rem;
             }
+
+            .google-form-btn {
+                font-size: 1rem;
+                padding: 12px 30px;
+            }
         }
     </style>
 </head>
@@ -377,44 +313,18 @@
             <div class="emoji">💌</div>
             <div class="message" style="font-size: 2rem; margin-bottom: 20px;">Let's stay in touch!</div>
             
-            <div class="setup-instructions">
-                <h3>📝 Setup Your Google Form (2 Minutes!)</h3>
-                <ol>
-                    <li>Go to <a href="https://forms.google.com" target="_blank">forms.google.com</a></li>
-                    <li>Click <strong>"+ Blank"</strong> to create a new form</li>
-                    <li>Add these fields:
-                        <ul style="margin-left: 20px; margin-top: 5px;">
-                            <li>Name (Short answer)</li>
-                            <li>Instagram ID (Short answer)</li>
-                            <li>Email (Short answer)</li>
-                            <li>Phone (Short answer - optional)</li>
-                            <li>Message (Paragraph - optional)</li>
-                        </ul>
-                    </li>
-                    <li>Click <strong>"Send"</strong> button (top-right)</li>
-                    <li>Click the <strong>Link icon</strong> (🔗)</li>
-                    <li>Click <strong>"Shorten URL"</strong></li>
-                    <li>Copy the link and paste it below 👇</li>
-                </ol>
-            </div>
+            <p style="font-size: 1.1rem; color: #555; margin-bottom: 20px;">
+                Please fill out this quick form so I can get your info! 😊
+            </p>
 
-            <div class="url-input-box">
-                <label style="font-weight: 600; display: block; margin-bottom: 5px;">
-                    Paste Your Google Form Link Here:
-                </label>
-                <input type="url" id="googleFormUrl" placeholder="https://forms.gle/xxxxxxxxxx">
-                <button onclick="saveFormUrl()">Save Form Link</button>
-            </div>
+            <a href="https://forms.gle/zoN4VCoDuwZq9DNk8" class="google-form-btn" target="_blank">
+                Fill Out Form 💕
+            </a>
 
-            <div class="google-form-container">
-                <a href="#" id="googleFormLink" class="google-form-btn" target="_blank">
-                    Fill Out Form 💕
-                </a>
-                <p class="form-note">Opens in a new tab • Your info will be sent directly to KB 🔒</p>
-                <p class="form-note" style="margin-top: 5px; font-size: 0.85rem; color: #999;">
-                    You'll receive a copy of your responses in your email
-                </p>
-            </div>
+            <p class="form-note">
+                🔒 Your info will be sent directly to KB<br>
+                Opens in a new tab • Takes just 30 seconds
+            </p>
         </div>
     </div>
 
@@ -428,28 +338,9 @@
         const questionSection = document.getElementById('questionSection');
         const celebration = document.getElementById('celebration');
         const contactForm = document.getElementById('contactForm');
-        const googleFormLink = document.getElementById('googleFormLink');
 
         let floatingInterval;
         let isPaused = false;
-
-        // Load saved Google Form URL
-        const savedUrl = localStorage.getItem('googleFormUrl');
-        if (savedUrl) {
-            document.getElementById('googleFormUrl').value = savedUrl;
-            googleFormLink.href = savedUrl;
-        }
-
-        function saveFormUrl() {
-            const url = document.getElementById('googleFormUrl').value.trim();
-            if (url && (url.includes('forms.gle') || url.includes('docs.google.com/forms'))) {
-                localStorage.setItem('googleFormUrl', url);
-                googleFormLink.href = url;
-                alert('✅ Form link saved! The button is now ready to use.');
-            } else {
-                alert('❌ Please enter a valid Google Forms link');
-            }
-        }
 
         function getRandomPosition() {
             const btnRect = noBtn.getBoundingClientRect();
@@ -529,10 +420,12 @@
             questionSection.style.display = 'none';
             celebration.style.display = 'flex';
             
+            // Create confetti
             for (let i = 0; i < 50; i++) {
                 setTimeout(() => createConfetti(), i * 30);
             }
 
+            // Show contact form after celebration
             setTimeout(() => {
                 celebration.style.display = 'none';
                 contactForm.style.display = 'flex';
