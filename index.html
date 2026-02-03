@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine? 💕</title>
+    <title>Valentine Request - Debug Version 💕</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -20,6 +20,44 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            padding: 20px;
+        }
+
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #0f0;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 300px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 9999;
+        }
+
+        .debug-panel h4 {
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .debug-log {
+            margin: 2px 0;
+        }
+
+        .debug-error {
+            color: #f00;
+        }
+
+        .debug-success {
+            color: #0f0;
+        }
+
+        .debug-warning {
+            color: #ff0;
         }
 
         .heart-bg {
@@ -37,35 +75,26 @@
         .container {
             text-align: center;
             background: white;
-            padding: 60px 50px;
+            padding: 40px 30px;
             border-radius: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            width: 90%;
+            max-width: 600px;
+            width: 100%;
             position: relative;
             z-index: 10;
-            max-height: 85vh;
-            overflow-y: auto;
-            margin: 20px;
         }
 
         h1 {
             font-family: 'Caveat', cursive;
-            font-size: 3.5rem;
+            font-size: 3rem;
             color: #e63946;
             margin-bottom: 20px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
 
         .question {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: #333;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             font-weight: 700;
         }
 
@@ -73,10 +102,7 @@
             display: flex;
             gap: 20px;
             justify-content: center;
-            align-items: center;
-            position: relative;
-            min-height: 60px;
-            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         button {
@@ -85,8 +111,7 @@
             border: none;
             border-radius: 50px;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            cursor: pointer;
         }
 
         #yesBtn {
@@ -94,103 +119,40 @@
             padding: 15px 40px;
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
-            cursor: pointer;
         }
 
         #yesBtn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
-        }
-
-        #noBtn {
-            font-size: 0.9rem;
-            padding: 10px 25px;
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            color: #333;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.15s ease;
-            cursor: pointer;
-            position: fixed;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        #noBtn.paused {
-            transition: all 0.5s ease;
-        }
-
-        .celebration {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .emoji {
-            font-size: 8rem;
-            animation: bounce 0.6s ease;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            25% { transform: translateY(-30px); }
-            50% { transform: translateY(-15px); }
-            75% { transform: translateY(-5px); }
-        }
-
-        .message {
-            font-family: 'Caveat', cursive;
-            font-size: 3rem;
-            color: #e63946;
-            margin-top: 20px;
-            animation: slideUp 0.5s ease 0.3s both;
-        }
-
-        .thank-you {
-            font-family: 'Quicksand', sans-serif;
-            font-size: 1.3rem;
-            color: #555;
-            margin-top: 15px;
-            font-weight: 500;
-            animation: slideUp 0.5s ease 0.6s both;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            transform: scale(1.05);
         }
 
         .contact-form {
             display: none;
-            flex-direction: column;
-            align-items: center;
             animation: fadeIn 0.5s ease;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
         }
 
         .contact-form.show {
-            display: flex;
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-group {
+            margin: 15px 0;
         }
 
         .contact-form input,
         .contact-form textarea {
             width: 100%;
             padding: 12px 20px;
-            margin: 10px 0;
+            margin: 5px 0;
             border: 2px solid #f093fb;
             border-radius: 25px;
             font-family: 'Quicksand', sans-serif;
             font-size: 1rem;
             outline: none;
-            transition: border-color 0.3s ease;
         }
 
         .contact-form input:focus,
@@ -215,13 +177,11 @@
             font-weight: 700;
             cursor: pointer;
             margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: transform 0.3s ease;
+            width: 100%;
         }
 
         .submit-btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
         }
 
         .submit-btn:disabled {
@@ -229,144 +189,105 @@
             cursor: not-allowed;
         }
 
-        .form-note {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 10px;
-            text-align: center;
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
         }
 
-        .setup-instructions {
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .alert-warning {
             background: #fff3cd;
+            color: #856404;
             border: 2px solid #ffc107;
+        }
+
+        .setup-box {
+            background: #e7f3ff;
+            border: 2px solid #2196F3;
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
             text-align: left;
-            font-size: 0.9rem;
-            line-height: 1.6;
         }
 
-        .setup-instructions h3 {
-            color: #856404;
+        .setup-box h3 {
+            color: #1976D2;
             margin-bottom: 10px;
         }
 
-        .setup-instructions ol {
-            margin-left: 20px;
-        }
-
-        .setup-instructions code {
-            background: #f8f9fa;
-            padding: 2px 6px;
+        .setup-box code {
+            background: #fff;
+            padding: 2px 8px;
             border-radius: 3px;
-            font-family: monospace;
             color: #d63384;
+            font-family: monospace;
         }
 
-        .success-message {
-            display: none;
-            background: #d4edda;
-            color: #155724;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            border: 2px solid #c3e6cb;
+        .setup-box ol {
+            margin-left: 20px;
+            line-height: 1.8;
         }
 
-        .success-message.show {
-            display: block;
-            animation: fadeIn 0.5s ease;
+        .setup-box a {
+            color: #2196F3;
+            font-weight: 700;
         }
 
-        .error-message {
-            display: none;
-            background: #f8d7da;
-            color: #721c24;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            border: 2px solid #f5c6cb;
-        }
-
-        .error-message.show {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #f0f;
-            position: absolute;
-            animation: confetti-fall 3s linear;
-        }
-
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .footer {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            z-index: 1000;
+        .test-info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
             font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
+        }
+
+        .test-info strong {
+            color: #e63946;
         }
 
         @media (max-width: 600px) {
             .container {
-                padding: 40px 30px;
-                margin: 20px;
+                padding: 30px 20px;
             }
 
             h1 {
-                font-size: 2.5rem;
-            }
-
-            .question {
-                font-size: 1.2rem;
-            }
-
-            #yesBtn {
-                font-size: 1rem;
-                padding: 12px 30px;
-            }
-
-            #noBtn {
-                font-size: 0.8rem;
-                padding: 8px 20px;
-            }
-
-            .emoji {
-                font-size: 5rem;
-            }
-
-            .message {
                 font-size: 2rem;
             }
 
-            .thank-you {
-                font-size: 1.1rem;
+            .debug-panel {
+                font-size: 10px;
+                max-width: 200px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="debug-panel" id="debugPanel">
+        <h4>🔧 Debug Console</h4>
+        <div id="debugLogs"></div>
+    </div>
+
     <div class="heart-bg" style="top: 10%; left: 15%;">❤️</div>
     <div class="heart-bg" style="top: 20%; right: 20%; animation-delay: 2s;">💕</div>
     <div class="heart-bg" style="bottom: 15%; left: 10%; animation-delay: 4s;">💖</div>
-    <div class="heart-bg" style="bottom: 25%; right: 15%; animation-delay: 6s;">💗</div>
-    <div class="heart-bg" style="top: 50%; left: 5%; animation-delay: 3s;">💝</div>
-    <div class="heart-bg" style="top: 60%; right: 10%; animation-delay: 5s;">💘</div>
 
     <div class="container">
         <div id="questionSection">
@@ -374,102 +295,204 @@
             <p class="question">Will You Be My Valentine?</p>
             <div class="buttons">
                 <button id="yesBtn">Yes! 💖</button>
-                <button id="noBtn">No</button>
             </div>
-        </div>
-
-        <div id="celebration" class="celebration">
-            <div class="emoji">😊</div>
-            <div class="message">Yay! I knew it! 💕</div>
-            <p class="thank-you">Thanks for accepting my Valentine request!</p>
         </div>
 
         <div id="contactForm" class="contact-form">
-            <div class="emoji">💌</div>
-            <div class="message" style="font-size: 2rem; margin-bottom: 20px;">Let's stay in touch!</div>
+            <h1 style="font-size: 2.5rem;">💌 Let's Connect!</h1>
             
-            <!-- ⚠️ IMPORTANT: Replace YOUR_FORM_ID with your actual Formspree ID -->
-            <div class="setup-instructions">
-                <h3>⚠️ Setup Instructions</h3>
-                <p><strong>Follow these steps:</strong></p>
-                <ol>
-                    <li>Go to <a href="https://formspree.io" target="_blank">formspree.io</a> and sign up</li>
-                    <li>Create a new form and get your form ID</li>
-                    <li>Replace <code>YOUR_FORM_ID</code> in line 352 with your actual ID</li>
-                    <li><strong>IMPORTANT:</strong> Upload this file to a web host (GitHub Pages, Netlify, etc.)</li>
-                    <li>Formspree will NOT work if you open the file directly from your computer!</li>
+            <div class="test-info">
+                <strong>📍 Current Status:</strong>
+                <div id="statusInfo">Checking setup...</div>
+            </div>
+
+            <div class="setup-box">
+                <h3>🔧 Quick Setup Guide</h3>
+                <p><strong>Your Formspree Endpoint:</strong></p>
+                <code id="formEndpoint">Not Set</code>
+                
+                <ol style="margin-top: 15px;">
+                    <li>Go to <a href="https://formspree.io" target="_blank">formspree.io</a></li>
+                    <li>Sign up & create a form</li>
+                    <li>Copy your form ID (e.g., <code>mwpkglab</code>)</li>
+                    <li>Paste it in the input below 👇</li>
+                    <li>Upload this page to a web host (GitHub Pages, Netlify)</li>
                 </ol>
-                <p style="margin-top: 10px;"><strong>Your form endpoint should look like:</strong><br>
-                <code>https://formspree.io/f/mxxxxxxx</code></p>
+
+                <div style="margin-top: 15px;">
+                    <input type="text" id="formIdInput" placeholder="Paste your Formspree ID here (e.g., mwpkglab)" 
+                           style="width: 100%; padding: 10px; border-radius: 5px; border: 2px solid #2196F3;">
+                    <button onclick="updateFormId()" style="margin-top: 10px; padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Update Form ID
+                    </button>
+                </div>
             </div>
-            
-            <!-- Replace YOUR_FORM_ID below -->
-            <form id="valentineForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-                <input type="text" name="name" placeholder="Your Name *" required>
-                <input type="text" name="instagram" placeholder="Instagram ID (e.g., @username) *" required>
-                <input type="email" name="_replyto" placeholder="Your Email *" required>
-                <input type="text" name="contact" placeholder="Phone Number (optional)">
-                <textarea name="message" placeholder="Leave a sweet message (optional)" rows="3"></textarea>
+
+            <div id="alertSuccess" class="alert alert-success">
+                ✅ <strong>Success!</strong> Your message was sent! Check your Formspree dashboard.
+            </div>
+
+            <div id="alertError" class="alert alert-error">
+                ❌ <strong>Error!</strong> <span id="errorText">Something went wrong.</span>
+            </div>
+
+            <div id="alertWarning" class="alert alert-warning">
+                ⚠️ <strong>Warning!</strong> <span id="warningText"></span>
+            </div>
+
+            <form id="valentineForm" method="POST">
+                <div class="form-group">
+                    <input type="text" name="name" id="nameInput" placeholder="Your Name *" required>
+                </div>
                 
-                <!-- Hidden fields for better email formatting -->
+                <div class="form-group">
+                    <input type="text" name="instagram" id="instaInput" placeholder="Instagram ID (e.g., @username) *" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" name="_replyto" id="emailInput" placeholder="Your Email *" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="tel" name="phone" id="phoneInput" placeholder="Phone Number (optional)">
+                </div>
+                
+                <div class="form-group">
+                    <textarea name="message" id="messageInput" placeholder="Leave a sweet message (optional)" rows="3"></textarea>
+                </div>
+                
                 <input type="hidden" name="_subject" value="💕 New Valentine Response!">
-                <input type="hidden" name="_next" value="#success">
                 
-                <button type="submit" class="submit-btn" id="submitBtn">Send 💕</button>
+                <button type="submit" class="submit-btn" id="submitBtn">Send Message 💕</button>
             </form>
-            
-            <div class="success-message" id="successMessage">
-                <h3>✅ Message Sent Successfully!</h3>
-                <p>Thanks for sharing your info! KB will get back to you soon! 💕</p>
-            </div>
-            
-            <div class="error-message" id="errorMessage">
-                <h3>❌ Oops! Something went wrong</h3>
-                <p>Please make sure you've set up Formspree correctly and are hosting this page online.</p>
-            </div>
-            
-            <p class="form-note">Your info will be sent directly to KB 🔒</p>
+
+            <p style="text-align: center; color: #666; margin-top: 15px; font-size: 0.9rem;">
+                🔒 Your info will be sent directly to KB
+            </p>
         </div>
     </div>
 
-    <div class="footer">
-        Created with ❤️ by KB
-    </div>
-
     <script>
-        const yesBtn = document.getElementById('yesBtn');
-        const noBtn = document.getElementById('noBtn');
-        const questionSection = document.getElementById('questionSection');
-        const celebration = document.getElementById('celebration');
-        const contactForm = document.getElementById('contactForm');
+        // Debug logging
+        function log(message, type = 'info') {
+            const debugLogs = document.getElementById('debugLogs');
+            const logClass = type === 'error' ? 'debug-error' : type === 'success' ? 'debug-success' : type === 'warning' ? 'debug-warning' : '';
+            const timestamp = new Date().toLocaleTimeString();
+            debugLogs.innerHTML += `<div class="${logClass}">[${timestamp}] ${message}</div>`;
+            debugLogs.scrollTop = debugLogs.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // Check environment
+        function checkEnvironment() {
+            const protocol = window.location.protocol;
+            const statusInfo = document.getElementById('statusInfo');
+            
+            log(`Protocol: ${protocol}`, 'info');
+            log(`Host: ${window.location.host}`, 'info');
+            
+            if (protocol === 'file:') {
+                statusInfo.innerHTML = '❌ <strong>NOT HOSTED!</strong> Formspree will not work. Please upload to GitHub Pages, Netlify, or Vercel.';
+                showAlert('warning', 'You are opening the file directly from your computer. Formspree requires the page to be hosted online!');
+                log('WARNING: File opened locally. Formspree will not work!', 'error');
+                return false;
+            } else {
+                statusInfo.innerHTML = '✅ <strong>Hosted Online</strong> - Formspree should work!';
+                log('Environment check passed - page is hosted online', 'success');
+                return true;
+            }
+        }
+
+        // Form ID management
+        let formspreeId = localStorage.getItem('formspreeId') || '';
+
+        function updateFormId() {
+            const input = document.getElementById('formIdInput');
+            formspreeId = input.value.trim();
+            
+            if (formspreeId) {
+                localStorage.setItem('formspreeId', formspreeId);
+                const endpoint = `https://formspree.io/f/${formspreeId}`;
+                document.getElementById('formEndpoint').textContent = endpoint;
+                document.getElementById('valentineForm').action = endpoint;
+                log(`Form ID updated: ${formspreeId}`, 'success');
+                showAlert('success', 'Form ID updated! You can now submit the form.');
+                hideAlert('warning');
+            } else {
+                log('No Form ID provided', 'error');
+            }
+        }
+
+        // Load saved form ID
+        if (formspreeId) {
+            document.getElementById('formIdInput').value = formspreeId;
+            updateFormId();
+        }
+
+        // Show/hide alerts
+        function showAlert(type, message) {
+            const alertMap = {
+                'success': 'alertSuccess',
+                'error': 'alertError',
+                'warning': 'alertWarning'
+            };
+            
+            const alertId = alertMap[type];
+            if (alertId) {
+                if (type === 'error') {
+                    document.getElementById('errorText').textContent = message;
+                } else if (type === 'warning') {
+                    document.getElementById('warningText').textContent = message;
+                }
+                document.getElementById(alertId).classList.add('show');
+            }
+        }
+
+        function hideAlert(type) {
+            const alertMap = {
+                'success': 'alertSuccess',
+                'error': 'alertError',
+                'warning': 'alertWarning'
+            };
+            
+            const alertId = alertMap[type];
+            if (alertId) {
+                document.getElementById(alertId).classList.remove('show');
+            }
+        }
+
+        // Form submission
         const valentineForm = document.getElementById('valentineForm');
         const submitBtn = document.getElementById('submitBtn');
-        const successMessage = document.getElementById('successMessage');
-        const errorMessage = document.getElementById('errorMessage');
 
-        let floatingInterval;
-        let isPaused = false;
-
-        // Check if form was submitted successfully (Formspree redirects with hash)
-        window.addEventListener('load', () => {
-            if (window.location.hash === '#success') {
-                questionSection.style.display = 'none';
-                celebration.style.display = 'none';
-                contactForm.style.display = 'flex';
-                successMessage.classList.add('show');
-                valentineForm.style.display = 'none';
-            }
-            setTimeout(startFloating, 500);
-        });
-
-        // Handle form submission
         valentineForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            log('Form submission started', 'info');
+            
+            // Hide all alerts
+            hideAlert('success');
+            hideAlert('error');
+            hideAlert('warning');
+            
+            // Check if form ID is set
+            if (!formspreeId) {
+                log('No Formspree ID set!', 'error');
+                showAlert('error', 'Please set your Formspree Form ID first!');
+                return;
+            }
+            
+            // Disable button
             submitBtn.disabled = true;
             submitBtn.textContent = 'Sending... 💌';
+            log('Submitting to: ' + valentineForm.action, 'info');
             
             const formData = new FormData(valentineForm);
+            
+            // Log form data
+            for (let [key, value] of formData.entries()) {
+                log(`Field ${key}: ${value}`, 'info');
+            }
             
             try {
                 const response = await fetch(valentineForm.action, {
@@ -480,121 +503,42 @@
                     }
                 });
                 
+                log(`Response status: ${response.status}`, 'info');
+                
                 if (response.ok) {
-                    successMessage.classList.add('show');
-                    valentineForm.style.display = 'none';
-                    createConfetti();
+                    log('Form submitted successfully!', 'success');
+                    showAlert('success', '');
+                    valentineForm.reset();
+                    submitBtn.textContent = 'Sent! 💕';
+                    setTimeout(() => {
+                        submitBtn.textContent = 'Send Another 💕';
+                        submitBtn.disabled = false;
+                    }, 3000);
                 } else {
-                    throw new Error('Form submission failed');
+                    const errorData = await response.json();
+                    log(`Server error: ${JSON.stringify(errorData)}`, 'error');
+                    throw new Error(errorData.error || 'Server returned an error');
                 }
             } catch (error) {
-                errorMessage.classList.add('show');
+                log(`Error: ${error.message}`, 'error');
+                showAlert('error', `Failed to send: ${error.message}. Check the debug console.`);
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Send 💕';
-                console.error('Error:', error);
+                submitBtn.textContent = 'Send Message 💕';
             }
         });
 
-        function getRandomPosition() {
-            const btnRect = noBtn.getBoundingClientRect();
-            const maxX = window.innerWidth - btnRect.width - 20;
-            const maxY = window.innerHeight - btnRect.height - 20;
-            return {
-                x: Math.random() * maxX + 10,
-                y: Math.random() * maxY + 10
-            };
-        }
-
-        function positionOverYes() {
-            const yesRect = yesBtn.getBoundingClientRect();
-            const noRect = noBtn.getBoundingClientRect();
-            noBtn.classList.add('paused');
-            noBtn.style.left = (yesRect.left + yesRect.width/2 - noRect.width/2) + 'px';
-            noBtn.style.top = (yesRect.top + yesRect.height/2 - noRect.height/2) + 'px';
-        }
-
-        function moveToRandomPosition() {
-            noBtn.classList.remove('paused');
-            const pos = getRandomPosition();
-            noBtn.style.left = pos.x + 'px';
-            noBtn.style.top = pos.y + 'px';
-        }
-
-        function startFloating() {
-            moveToRandomPosition();
-            let moveCount = 0;
-            floatingInterval = setInterval(() => {
-                if (isPaused) return;
-                moveCount++;
-                if (moveCount % 3 === 0) {
-                    positionOverYes();
-                    isPaused = true;
-                    setTimeout(() => {
-                        isPaused = false;
-                        moveToRandomPosition();
-                    }, 2000);
-                } else {
-                    moveToRandomPosition();
-                }
-            }, 1500);
-        }
-
-        function moveAwayFrom(targetX, targetY) {
-            if (isPaused) {
-                isPaused = false;
-            }
-            const btnRect = noBtn.getBoundingClientRect();
-            const btnCenterX = btnRect.left + btnRect.width / 2;
-            const btnCenterY = btnRect.top + btnRect.height / 2;
-            const distance = Math.sqrt(Math.pow(targetX - btnCenterX, 2) + Math.pow(targetY - btnCenterY, 2));
-            
-            if (distance < 100) {
-                noBtn.classList.remove('paused');
-                const angle = Math.atan2(btnCenterY - targetY, btnCenterX - targetX);
-                let newX = btnRect.left + Math.cos(angle) * 150;
-                let newY = btnRect.top + Math.sin(angle) * 150;
-                newX = Math.max(10, Math.min(newX, window.innerWidth - btnRect.width - 20));
-                newY = Math.max(10, Math.min(newY, window.innerHeight - btnRect.height - 20));
-                noBtn.style.left = newX + 'px';
-                noBtn.style.top = newY + 'px';
-            }
-        }
-
-        document.addEventListener('mousemove', (e) => moveAwayFrom(e.clientX, e.clientY));
-        document.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) moveAwayFrom(e.touches[0].clientX, e.touches[0].clientY);
-        }, { passive: true });
-        document.addEventListener('touchstart', (e) => {
-            if (e.touches.length > 0) moveAwayFrom(e.touches[0].clientX, e.touches[0].clientY);
-        }, { passive: true });
-
-        yesBtn.addEventListener('click', () => {
-            clearInterval(floatingInterval);
-            questionSection.style.display = 'none';
-            celebration.style.display = 'flex';
-            
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => createConfetti(), i * 30);
-            }
-
-            setTimeout(() => {
-                celebration.style.display = 'none';
-                contactForm.style.display = 'flex';
-            }, 3000);
+        // Show form when Yes is clicked
+        document.getElementById('yesBtn').addEventListener('click', () => {
+            document.getElementById('questionSection').style.display = 'none';
+            document.getElementById('contactForm').classList.add('show');
+            log('User clicked Yes button', 'success');
         });
 
-        function createConfetti() {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * window.innerWidth + 'px';
-            confetti.style.top = '-10px';
-            confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-            confetti.style.width = Math.random() * 10 + 5 + 'px';
-            confetti.style.height = confetti.style.width;
-            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-            document.body.appendChild(confetti);
-            setTimeout(() => confetti.remove(), 3000);
-        }
+        // Run environment check on load
+        window.addEventListener('load', () => {
+            log('Page loaded', 'info');
+            checkEnvironment();
+        });
     </script>
 </body>
 </html>
